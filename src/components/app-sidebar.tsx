@@ -135,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       title: "Github",
-      url: "https://www.github.com/amitlyzr",
+      url: "https://github.com/amitlyzr/candidate-shortlisting-agent-os",
       icon: IconBrandGithub,
       external: true,
     },
