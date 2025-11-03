@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model User {
+  id                String               @id @default(auto()) @map("_id") @db.ObjectId
+  email             String               @unique
+  userId            String               @unique // memberstack user ID
+  orgId             String
+  token             String
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  
+  jobDescriptions   JobDescription[]
+  candidates        Candidate[]
+  evaluations       CandidateEvaluation[]
+
+  @@map("users")
+}
+
+model JobDescription {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  title          String
+  department     String?
+  location       String?
+  type           String?
+  status         String   @default("active")
+  fileName       String
+  fileType       String
+  rawContent     String
+  parsedContent  String
+  createdAt      DateTime @default(now())
+  
+  user           User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  evaluations    CandidateEvaluation[]
+  
+  @@map("job_descriptions")
+}
+
+model Candidate {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  name           String
+  email          String?
+  phone          String?
+  currentRole    String?
+  currentCompany String?
+  location       String?
+  experience     String?
+  groupName      String   @default("CDO - Chief Delivery Officer Group")
+  fileName       String
+  fileType       String
+  rawContent     String
+  parsedContent  String
+  createdAt      DateTime @default(now())
+  
+  user           User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  evaluations    CandidateEvaluation[]
+  
+  @@map("candidates")
+}
+
+model CandidateEvaluation {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  sessionId        String?
+  candidateId      String   @db.ObjectId
+  jdId             String   @db.ObjectId
+  rubricId         String
+  rubricTitle      String
+  rubricWeightages Json?
+  overallScore     Float
+  scores           Json
+  summary          String
+  createdAt        DateTime @default(now())
+  
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidate        Candidate      @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  jobDescription   JobDescription @relation(fields: [jdId], references: [id], onDelete: Cascade)
+  
+  @@map("candidate_evaluations")
+}
