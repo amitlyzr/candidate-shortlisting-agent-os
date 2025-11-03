@@ -79,7 +79,7 @@ The Candidate Shortlisting Application is an intelligent HR tool that leverages 
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/amitlyzr/candidate-shortlisting-agent.git
+git clone https://github.com/amitlyzr/candidate-shortlisting-agent-os.git
 cd candidate-shortlisting-agent
 ```
 
